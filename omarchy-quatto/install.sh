@@ -145,6 +145,54 @@ fi
 chmod +x "$BAR_SCRIPTS_DIR/praybar.py"
 success "praybar.py → $BAR_SCRIPTS_DIR/"
 
+# ─── 3b. Verify auto-detected location ───────────────────
+# IP-based geolocation (the fallback tiers if Wi-Fi positioning doesn't
+# fire) resolves to whichever city your ISP is *registered* in, which for
+# many Egyptian ISPs is Cairo regardless of which governorate you're
+# actually in. Rather than let that slip by silently, show exactly what
+# got detected right now and offer an immediate manual fix if it's wrong.
+if [[ "$loc_choice" != "2" ]]; then
+    header "📍 Verifying detected location..."
+    info "Detecting your location (this can take a few seconds)..."
+    DETECTED="$(python3 "$BAR_SCRIPTS_DIR/praybar.py" 2>/dev/null | python3 -c "
+import json, sys
+try:
+    d = json.load(sys.stdin)
+    print(d.get('tooltip', '').splitlines()[0].replace('🕌  Prayer Times — ', ''))
+except Exception:
+    print('')
+" 2>/dev/null)"
+
+    if [[ -n "$DETECTED" ]]; then
+        echo -e "  Detected: ${CYAN}${DETECTED}${RESET}"
+    else
+        warn "Could not determine what was detected — check manually with:"
+        echo -e "    ${CYAN}python3 $BAR_SCRIPTS_DIR/praybar.py --locate${RESET}"
+    fi
+
+    read -rp "  Is this correct? [Y/n] " loc_confirm
+    if [[ "$loc_confirm" =~ ^[Nn]$ ]]; then
+        echo -e "  ${CYAN}Tip:${RESET} search '<your city> coordinates' online, or use Google Maps"
+        echo -e "  (right-click your location → the numbers shown are lat, lon)."
+        read -rp "  Latitude  (e.g. 29.3084): " FIX_LAT
+        read -rp "  Longitude (e.g. 30.8428): " FIX_LON
+        read -rp "  City label to show in the tooltip (e.g. Fayoum, EG): " FIX_CITY
+        if [[ -n "$FIX_LAT" && -n "$FIX_LON" ]]; then
+            sed -i "s/^MANUAL_LATITUDE[[:space:]]*=.*/MANUAL_LATITUDE  = $FIX_LAT/"   "$BAR_SCRIPTS_DIR/praybar.py"
+            sed -i "s/^MANUAL_LONGITUDE[[:space:]]*=.*/MANUAL_LONGITUDE = $FIX_LON/" "$BAR_SCRIPTS_DIR/praybar.py"
+            sed -i "s/^MANUAL_CITY[[:space:]]*=.*/MANUAL_CITY      = \"$FIX_CITY\"/" "$BAR_SCRIPTS_DIR/praybar.py"
+            rm -f "$HOME/.cache/praybar_location_cache.json" "$HOME/.cache/praybar_times_cache.json"
+            success "Switched to manual location: ${FIX_LAT}, ${FIX_LON} (${FIX_CITY:-unlabeled})"
+        else
+            warn "No coordinates entered — leaving auto-detect on. You can fix this later by "
+            warn "editing MANUAL_LATITUDE/MANUAL_LONGITUDE/MANUAL_CITY in:"
+            echo -e "    ${CYAN}$BAR_SCRIPTS_DIR/praybar.py${RESET}"
+        fi
+    else
+        success "Location confirmed"
+    fi
+fi
+
 # ─── 4. Patch shell.json ─────────────────────────────────
 header "⚙️  Patching ~/.config/omarchy/shell.json..."
 

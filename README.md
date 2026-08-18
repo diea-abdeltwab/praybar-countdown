@@ -18,7 +18,7 @@
 | Platform | What it is | Docs |
 |---|---|---|
 | 🐧 **Linux (Waybar )** | A [Waybar](https://github.com/Alexays/Waybar) module — countdown in your status bar, tooltip with the full schedule | [`linux/README.md`](linux/README.md) |
-| 🐧 **Linux (Quickshell)** | The same countdown, ported to Quattro's new Quickshell bar via a custom `shell.json` command module | [`omarchy-quatto/README.md`](omarchy4/README.md) |
+| 🐧 **Linux (Quickshell)** | The same countdown, ported to Quattro's new Quickshell bar via a custom `shell.json` command module | [`omarchy-quatto/README.md`](omarchy-quatto/README.md) |
 | 📱 **Android** | A home-screen widget (3 sizes) + standalone app, with scheduled azan alarms | [`android/README.md`](android/README.md) |
 
 Not sure which Linux folder you need? If `~/.config/omarchy/shell.json` exists (or `omarchy --version` says 4.x), you're on Quattro → use `omarchy4/`. If you have `~/.config/waybar/config.jsonc`, use `linux/`.
@@ -41,7 +41,7 @@ All three share the same core idea — accurate, low-maintenance auto-location a
 praybar/
 ├── linux/      ← Waybar module (Omarchy 3 / any Waybar setup)
 │   └── screenshots/
-├── omarchy4/   ← Quickshell "command" module (Omarchy 4 "Quattro")
+├── omarchy-quatto/   ← Quickshell "command" module (Omarchy 4 "Quattro")
 ├── android/    ← Prayer Countdown app + widget (APK + source)
 │   └── screenshots/
 ├── LICENSE
@@ -50,7 +50,7 @@ praybar/
 
 Jump to whichever platform you need:
 - **Using Linux + Waybar (or Omarchy 3)?** → [`linux/README.md`](linux/README.md)
-- **Using Omarchy 4 "Quattro"?** → [`omarchy4/README.md`](omarchy4/README.md)
+- **Using Omarchy 4 "Quattro"?** → [`omarchy-quatto/README.md`](omarchy-quatto/README.md)
 - **Want it on your phone?** → [`android/README.md`](android/README.md)
 
 ---

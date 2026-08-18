@@ -212,6 +212,27 @@ Same fix as the Waybar version: set `MANUAL_LATITUDE` / `MANUAL_LONGITUDE` in
 available on this machine.
 </details>
 
+<details>
+<summary><strong>Detected city is way off (e.g. shows Cairo instead of my actual governorate)</strong></summary>
+<br>
+
+This means Wi-Fi positioning didn't fire (no Wi-Fi adapter, scanning
+blocked, or no nearby APs in Mozilla's database) and the script fell back to
+IP-based geolocation — which only knows your ISP's *registered* city, often
+a regional hub rather than where you actually are. Run:
+
+```bash
+python3 ~/.config/omarchy/bar/scripts/praybar.py --locate
+```
+
+to see exactly which tier (Wi-Fi / `wttr.in` / IP) fired and why the others
+didn't. If Wi-Fi positioning isn't viable on this machine, set
+`MANUAL_LATITUDE` / `MANUAL_LONGITUDE` / `MANUAL_CITY` in `praybar.py` — this
+is the only way to guarantee correctness when IP geolocation can't resolve
+your city. `install.sh` now shows the detected location and offers this
+manual fix on the spot if it's wrong.
+</details>
+
 ---
 
 ## 🏗️ Project Structure

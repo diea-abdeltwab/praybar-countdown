@@ -1,0 +1,6 @@
+[Unit]
+Description=Refresh Islamic prayer times cache (Omarchy 4 / Quickshell)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/.config/omarchy/bar/scripts/praybar.py

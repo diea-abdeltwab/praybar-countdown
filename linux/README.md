@@ -8,8 +8,9 @@
 [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Waybar](https://img.shields.io/badge/Waybar-1793D1?style=for-the-badge&logo=wayland&logoColor=white)](https://github.com/Alexays/Waybar)
 [![License](https://img.shields.io/badge/License-MIT-7A2E2E?style=for-the-badge)](#-license)
-
 [![Made in Egypt](https://img.shields.io/badge/Made%20in-Egypt%20🇪🇬-0F2238?style=for-the-badge)](https://github.com/diea-abdeltwab)
+
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=20&duration=2800&pause=900&color=7A2E2E&background=00000000&center=true&vCenter=true&width=650&lines=Street-level+location+%E2%80%94+no+manual+setup;Caches+smartly%2C+never+drifts+minute+to+minute;Amber+%E2%86%92+red+%E2%86%92+azan+as+the+time+gets+close)](https://git.io/typing-svg)
 
 </div>
 
@@ -46,9 +47,8 @@ It auto-detects your location from your IP, calculates accurate timings via the 
 
 The tooltip always shows the full day at a glance, with the next prayer marked:
 
-```
+```text
 🕌 Prayer Times — El Faiyum, Egypt
-
 Fajr        04:54
 Sunrise     06:27
 Dhuhr       13:01
@@ -56,7 +56,6 @@ Asr         16:36
 Maghrib     19:34   ← next
 Isha        20:56
 ```
-
 
 ---
 
@@ -90,9 +89,11 @@ git clone https://github.com/diea-abdeltwab/praybar.git
 cd praybar/linux
 chmod +x install.sh
 ./install.sh
+# → walks you through the 9 steps below, then restarts Waybar with the module live
 ```
 
 The installer will:
+
 1. ✅ Check dependencies
 2. 💾 Back up your current Waybar config
 3. 🕐 Ask whether you want **12-hour** or **24-hour** time in the tooltip
@@ -109,9 +110,8 @@ The installer will:
 
 ```bash
 ./uninstall.sh
+# → removes the module + the daily refresh timer, and restores your original Waybar config from backup
 ```
-
-Removes the module, the daily refresh timer, and restores your original Waybar config from backup.
 
 ---
 
@@ -131,7 +131,8 @@ METHOD = 5   # Egyptian General Authority of Survey
 | 2 | ISNA (North America) |
 | 9 | Kuwait |
 
-### Manual location (skip Wi-Fi/IP detection entirely)
+<details>
+<summary><b>Manual location (skip Wi-Fi/IP detection entirely)</b></summary>
 
 Set this during `./install.sh` (option 2 when asked), or edit directly any time:
 
@@ -143,7 +144,10 @@ MANUAL_CITY      = "Fayoum, EG"
 
 If your machine has no Wi-Fi adapter (desktop with only Ethernet, VM, etc.), auto-detect will always fall back to IP-based geolocation — manual coordinates are the only way to get exact accuracy in that case.
 
-### Time format
+</details>
+
+<details>
+<summary><b>Time format</b></summary>
 
 Chosen once during `./install.sh` (12h or 24h), but changeable anytime:
 
@@ -151,6 +155,8 @@ Chosen once during `./install.sh` (12h or 24h), but changeable anytime:
 TIME_FORMAT = "24h"   # "13:05"
 TIME_FORMAT = "12h"   # "1:05 PM"
 ```
+
+</details>
 
 ---
 
@@ -166,7 +172,14 @@ TIME_FORMAT = "12h"   # "1:05 PM"
 | **Jitter filter** | Ignores location changes < ~5 km | Stops positioning noise from being mistaken for travel |
 | **Timings cache** | Only when date or *accepted* location changes | Keeps prayer times stable day to day |
 
-Wi-Fi positioning needs a scan tool — `nmcli` (NetworkManager), `iw`, or `iwlist` (at least one is usually preinstalled) — and at least 2 nearby access points. On machines without a Wi-Fi adapter (desktops, VMs), praybar automatically falls back to `wttr.in`'s IP geolocation, which is considerably more accurate per-ISP than generic providers — this is what makes fully automatic detection reliable even while traveling. `wttr.in` is a free community service and occasionally rate-limited or slow; when that happens the confidence guard above stops the resulting weaker fallback reading from silently overwriting your last good location. `MANUAL_LATITUDE` / `MANUAL_LONGITUDE` above remain available for anyone who wants a fixed, guaranteed-exact location regardless.
+<details>
+<summary><b>Why Wi-Fi + wttr.in instead of a single IP lookup</b></summary>
+
+Wi-Fi positioning needs a scan tool — `nmcli` (NetworkManager), `iw`, or `iwlist` (at least one is usually preinstalled) — and at least 2 nearby access points. On machines without a Wi-Fi adapter (desktops, VMs), praybar automatically falls back to `wttr.in`'s IP geolocation, which is considerably more accurate per-ISP than generic providers — this is what makes fully automatic detection reliable even while traveling.
+
+`wttr.in` is a free community service and occasionally rate-limited or slow; when that happens, the confidence guard above stops the resulting weaker fallback reading from silently overwriting your last good location. `MANUAL_LATITUDE` / `MANUAL_LONGITUDE` remain available for anyone who wants a fixed, guaranteed-exact location regardless.
+
+</details>
 
 ---
 
@@ -177,6 +190,7 @@ Wi-Fi positioning needs a scan tool — `nmcli` (NetworkManager), `iw`, or `iwli
 <br>
 
 If Wi-Fi positioning isn't available on your machine, praybar falls back to `wttr.in`'s IP geolocation, which is already considerably more accurate than generic providers — but any IP-based method can occasionally be a city off. Set `MANUAL_LATITUDE` / `MANUAL_LONGITUDE` for a guaranteed-exact fix.
+
 </details>
 
 <details>
@@ -184,6 +198,7 @@ If Wi-Fi positioning isn't available on your machine, praybar falls back to `wtt
 <br>
 
 Install `mpv` or `paplay`, or drop your own file at `~/.config/waybar/azan.mp3`.
+
 </details>
 
 <details>
@@ -191,13 +206,14 @@ Install `mpv` or `paplay`, or drop your own file at `~/.config/waybar/azan.mp3`.
 <br>
 
 Re-run `./install.sh` — step 4 patches your config automatically. Check that `custom/praybar` appears in your modules list in `~/.config/waybar/config.jsonc`.
+
 </details>
 
 ---
 
 ## 🏗️ Project Structure
 
-```
+```text
 praybar/
 ├── praybar.py                    # main module script
 ├── install.sh                    # installer

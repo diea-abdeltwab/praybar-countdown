@@ -7,8 +7,9 @@
 [![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org/)
 [![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://developer.android.com/)
 [![License](https://img.shields.io/badge/License-MIT-7A2E2E?style=for-the-badge)](../LICENSE)
-
 [![Made in Egypt](https://img.shields.io/badge/Made%20in-Egypt%20🇪🇬-0F2238?style=for-the-badge)](https://github.com/diea-abdeltwab)
+
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=20&duration=2800&pause=900&color=7A2E2E&background=00000000&center=true&vCenter=true&width=650&lines=Country-aware+calculation+%E2%80%94+not+just+Egypt;Rings+the+full+azan%2C+even+with+the+app+closed;Widgets+survive+reboots%2C+no+re-setup)](https://git.io/typing-svg)
 
 <img src="screenshots/praybar-android-1.jpg" width="260"/>
 
@@ -56,6 +57,11 @@ It auto-detects your location and country, resolves the right calculation method
 
 The prebuilt APK is at [`PrayerCountdown.apk`](PrayerCountdown.apk).
 
+```bash
+adb push PrayerCountdown.apk /sdcard/Download/
+# → or just copy it over via USB / cloud drive — any method that lands the file on the phone works
+```
+
 1. Copy `PrayerCountdown.apk` to your phone (USB, cloud drive, `adb push`, etc.)
 2. Open it — Android will ask you to allow installs from this source once; approve it
 3. Open **Prayer Countdown** once so it can fetch your location and today's schedule
@@ -85,7 +91,7 @@ This repo ships the **raw source** (`source/`) — manifest, resources, and Kotl
 3. Copy [`source/debug.keystore`](source/debug.keystore) into your project root if you want matching debug-signature builds
 4. Sync Gradle, then **Build → Build Bundle(s)/APK(s) → Build APK(s)**
 
-```
+```text
 android/
 ├── PrayerCountdown.apk
 ├── screenshots/                  # README preview images
@@ -96,7 +102,8 @@ android/
     └── src/            # Kotlin source (17 files)
 ```
 
-### Source layout
+<details>
+<summary><b>Source layout — what each file does</b></summary>
 
 | File | Responsibility |
 |---|---|
@@ -109,6 +116,8 @@ android/
 | `WidgetRenderer.kt` | Shared widget rendering logic |
 | `MainActivity.kt` | Standalone app screen (today's full schedule) |
 | `LocaleHelper.kt` / `TimeFormatHelper.kt` | Language and 12h/24h toggling |
+
+</details>
 
 ---
 
@@ -143,6 +152,8 @@ Released under the [MIT License](../LICENSE) (applies to the whole `praybar` pro
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/diea-abdeltwab/)
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/diea-abdeltwab)
+
+⭐ **If this keeps you on time for prayer, consider starring the repo!** ⭐
 
 ![Footer](https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=12&height=100&section=footer)
 

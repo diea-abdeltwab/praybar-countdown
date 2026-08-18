@@ -28,6 +28,7 @@ import shutil
 import subprocess
 import signal
 import fcntl
+import sys
 
 # Leave these as None to auto-detect location from the device's IP.
 # Set both to fixed numbers if you'd rather pin a specific location
@@ -102,6 +103,26 @@ BELL_ICON = "🔔"
 PRAYER_KEYS = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"]
 
 
+# ─── Debug / diagnostics ───────────────────────────────────────────────────────
+#
+# Location bugs ("it says Cairo but I'm in Fayoum") are impossible to fix
+# blind, since the script normally only ever prints the final JSON line for
+# the bar — you can't tell whether Wi-Fi positioning was even attempted, or
+# silently failed and fell through to a less accurate tier. Run
+#     python3 praybar.py --locate
+# to bypass the location cache and print exactly what each tier (Wi-Fi →
+# wttr.in → IP) returned, and which one was ultimately used. Add
+# PRAYBAR_DEBUG=1 (or --locate, which turns it on automatically) to also see
+# this trail during a normal run.
+
+DEBUG = os.environ.get("PRAYBAR_DEBUG") == "1" or "--locate" in sys.argv
+
+
+def _debug(msg: str):
+    if DEBUG:
+        print(f"[praybar] {msg}", file=sys.stderr)
+
+
 # ─── Location detection ───────────────────────────────────────────────────────
 #
 # Phones and browsers ("how does Google know where I am?") get their
@@ -129,7 +150,9 @@ def _scan_wifi_aps():
     for scanner in (_scan_via_nmcli, _scan_via_iw, _scan_via_iwlist):
         aps = scanner()
         if aps:
+            _debug(f"{scanner.__name__} found {len(aps)} AP(s)")
             return aps
+        _debug(f"{scanner.__name__} found nothing")
     return None
 
 
@@ -141,6 +164,12 @@ def _scan_via_nmcli():
             ["nmcli", "device", "wifi", "rescan"],
             timeout=10, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
         )
+        # "rescan" only *triggers* an async scan and returns immediately —
+        # querying the list right away can still hand back NetworkManager's
+        # old cached results (or an empty list on the very first run), which
+        # silently degrades this tier down to whatever a stale/empty AP list
+        # produces. Give the scan a moment to actually finish.
+        time.sleep(2)
     except Exception:
         pass
     try:
@@ -266,6 +295,7 @@ def _wifi_geolocate():
     """
     aps = _scan_wifi_aps()
     if not aps or len(aps) < 2:
+        _debug(f"wifi: not enough APs to geolocate ({0 if not aps else len(aps)} found, need >=2)")
         return None
 
     try:
@@ -278,9 +308,18 @@ def _wifi_geolocate():
             data = json.loads(resp.read())
         accuracy_m = data.get("accuracy", 999999)
         if accuracy_m > 50000:   # sanity check — reject a wildly loose fix
+            _debug(f"wifi: Mozilla returned a low-confidence fix (accuracy {accuracy_m}m) — rejected")
             return None
+        _debug(f"wifi: Mozilla fix accuracy {accuracy_m}m from {len(aps)} AP(s)")
         return float(data["location"]["lat"]), float(data["location"]["lng"])
-    except Exception:
+    except Exception as e:
+        # The public "key=test" is a shared, rate-limited demo key — under
+        # load it can return 400/403 instead of a fix. That failure is
+        # silent by design everywhere else in this script (so the bar never
+        # errors out), which is exactly why this tier can quietly stop
+        # firing and you never notice you dropped down to IP-based
+        # geolocation. Surface it here so --locate can show it.
+        _debug(f"wifi: Mozilla Location Service request failed: {e}")
         return None
 
 
@@ -305,7 +344,8 @@ def _reverse_geocode(lat, lon):
         country = addr.get("country_code", "").upper()
         label = f"{city}, {country}".strip(", ")
         return label or None
-    except Exception:
+    except Exception as e:
+        _debug(f"reverse-geocode: nominatim lookup failed: {e}")
         return None
 
 
@@ -331,8 +371,15 @@ def _wttr_geolocate():
         city    = area["areaName"][0]["value"]
         country = area.get("country", [{}])[0].get("value", "")
         label   = f"{city}, {country}".strip(", ")
+        # wttr.in is still IP-based under the hood, just a different
+        # provider (IP2Location/MaxMind) — for ISPs that route everyone
+        # through a regional hub (very common in Egypt), this can *still*
+        # land on the wrong city. It's a better-tuned IP guess, not a
+        # substitute for the Wi-Fi tier.
+        _debug(f"wttr: resolved to {label} ({lat}, {lon})")
         return lat, lon, label
-    except Exception:
+    except Exception as e:
+        _debug(f"wttr: lookup failed: {e}")
         return None
 
 
@@ -377,6 +424,11 @@ def _accept_reading(lat, lon, city, source, stale_cached):
             )
             final_source = source if new_conf > old_conf else stale_cached.get("source", source)
         elif new_conf < old_conf:
+            _debug(
+                f"accept-reading: rejecting lower-confidence '{source}' "
+                f"({city}) — keeping cached '{stale_cached.get('source')}' "
+                f"({stale_cached.get('city')}) instead"
+            )
             final_lat, final_lon, final_city, final_source = (
                 stale_cached["lat"], stale_cached["lon"],
                 stale_cached["city"], stale_cached.get("source", source),
@@ -421,31 +473,47 @@ def get_location():
     the last known good location is kept instead of being overwritten.
     """
     if MANUAL_LATITUDE is not None and MANUAL_LONGITUDE is not None:
+        _debug(f"using MANUAL_LATITUDE/MANUAL_LONGITUDE ({MANUAL_LATITUDE}, {MANUAL_LONGITUDE})")
         return MANUAL_LATITUDE, MANUAL_LONGITUDE, (MANUAL_CITY or "Manual location")
 
     os.makedirs(os.path.dirname(LOCATION_CACHE_FILE), exist_ok=True)
+
+    # --locate always does a fresh lookup — that's the point of the
+    # diagnostic — even though it still reports what the cache holds first,
+    # so you can see whether a bad fix simply got "stuck" there.
+    force_fresh = "--locate" in sys.argv
 
     stale_cached = None
     if os.path.exists(LOCATION_CACHE_FILE):
         try:
             with open(LOCATION_CACHE_FILE) as f:
                 stale_cached = json.load(f)
-            if time.time() - stale_cached.get("fetched_at", 0) < LOCATION_CACHE_TTL:
+            age = time.time() - stale_cached.get("fetched_at", 0)
+            _debug(
+                f"cache: {stale_cached.get('city')} ({stale_cached.get('lat')}, "
+                f"{stale_cached.get('lon')}) via {stale_cached.get('source')}, "
+                f"age {int(age)}s"
+            )
+            if age < LOCATION_CACHE_TTL and not force_fresh:
                 return stale_cached["lat"], stale_cached["lon"], stale_cached["city"]
         except Exception:
             stale_cached = None
+    else:
+        _debug("cache: none yet")
 
     # ── Tier 1: Wi-Fi positioning ──
     wifi_fix = _wifi_geolocate()
     if wifi_fix:
         lat, lon = wifi_fix
         city = _reverse_geocode(lat, lon) or "Detected location"
+        _debug(f"tier used: wifi → {city} ({lat}, {lon})")
         return _accept_reading(lat, lon, city, "wifi", stale_cached)
 
     # ── Tier 2: wttr.in geolocation (same backend Omarchy's weather uses) ──
     wttr_fix = _wttr_geolocate()
     if wttr_fix:
         lat, lon, city = wttr_fix
+        _debug(f"tier used: wttr → {city} ({lat}, {lon})")
         return _accept_reading(lat, lon, city, "wttr", stale_cached)
 
     # ── Tier 3: generic IP-based geolocation ──
@@ -469,8 +537,10 @@ def get_location():
             with urllib.request.urlopen(req, timeout=6) as resp:
                 data = json.loads(resp.read())
             lat, lon, city = parse(data)
+            _debug(f"tier used: ip ({url}) → {city} ({lat}, {lon})")
             return _accept_reading(lat, lon, city, "ip", stale_cached)
-        except Exception:
+        except Exception as e:
+            _debug(f"ip: {url} failed: {e}")
             continue
 
     # ── Tier 4: reuse last known location instead of jumping cities ──
@@ -478,10 +548,12 @@ def get_location():
         try:
             with open(LOCATION_CACHE_FILE) as f:
                 cached = json.load(f)
+            _debug(f"tier used: stale cache fallback → {cached.get('city')}")
             return cached["lat"], cached["lon"], cached["city"]
         except Exception:
             pass
 
+    _debug(f"tier used: hardcoded FALLBACK → {FALLBACK_CITY}")
     return FALLBACK_LATITUDE, FALLBACK_LONGITUDE, FALLBACK_CITY
 
 
@@ -799,7 +871,33 @@ def build_tooltip(timings: dict, next_key: str, city: str) -> str:
 
 # ─── Main ─────────────────────────────────────────────────────────────────────
 
+def _run_locate_diagnostic():
+    """
+    Handler for `python3 praybar.py --locate`. Bypasses the location cache,
+    runs the full detection chain with debug tracing on, and prints a plain
+    summary — this never touches the bar's JSON stdout contract, so it's
+    safe to run by hand while troubleshooting a wrong city.
+    """
+    print("praybar location diagnostic — running Wi-Fi → wttr.in → IP chain...\n",
+          file=sys.stderr)
+    lat, lon, city = get_location()
+    print(f"\nFinal result: {city}  ({lat}, {lon})", file=sys.stderr)
+    print(
+        "\nIf this is wrong, the most reliable fix is a manual override:\n"
+        "  1. Look up your exact coordinates (e.g. search '<your city> "
+        "coordinates', or right-click your location in Google Maps).\n"
+        "  2. Open this file and set MANUAL_LATITUDE / MANUAL_LONGITUDE / "
+        "MANUAL_CITY near the top, or re-run install.sh and choose the "
+        "manual option when asked.",
+        file=sys.stderr,
+    )
+
+
 def main():
+    if "--locate" in sys.argv:
+        _run_locate_diagnostic()
+        return
+
     lat, lon, city = get_location()
     timings = fetch_prayer_times(lat, lon)
 

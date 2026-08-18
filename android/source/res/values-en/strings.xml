@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Prayer Countdown</string>
+    <string name="widget_description">An elegant countdown to the next prayer, with automatic location and full azan sound</string>
+    <string name="widget_label_large">Prayer Countdown</string>
+    <string name="widget_label_small">Prayer Countdown (single line)</string>
+    <string name="widget_label_square">Prayer Countdown (2x1)</string>
+
+    <string name="prayer_fajr">Fajr</string>
+    <string name="prayer_shurouq">Sunrise</string>
+    <string name="prayer_dhuhr">Dhuhr</string>
+    <string name="prayer_asr">Asr</string>
+    <string name="prayer_maghrib">Maghrib</string>
+    <string name="prayer_isha">Isha</string>
+
+    <string name="next_prayer_label">Next</string>
+    <string name="connection_error">Can\'t connect</string>
+    <string name="check_internet">Check your internet connection</string>
+    <string name="loading">Updating…</string>
+    <string name="refresh_now">Refresh now</string>
+    <string name="today_times_header">Today\'s prayer times</string>
+    <string name="widget_instructions">Long-press the home screen → Widgets → "Prayer Countdown" to add the countdown widget.</string>
+    <string name="lang_toggle_button">العربية</string>
+
+    <string name="azan_title">🕌 It\'s time for %1$s prayer</string>
+    <string name="azan_text">Allahu Akbar — tap to stop the azan</string>
+    <string name="azan_stop_action">Stop Azan</string>
+</resources>

@@ -1,0 +1,6 @@
+[Unit]
+Description=Refresh Islamic prayer times cache
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/.config/waybar/praybar.py

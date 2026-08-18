@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="deep_green">#0B3D2E</color>
+    <color name="mid_green">#145C3E</color>
+    <color name="emerald">#1E7A4C</color>
+    <color name="gold">#D4AF37</color>
+    <color name="gold_light">#F0D68C</color>
+    <color name="cream">#FBF3DD</color>
+    <color name="imminent_red">#8C2F1B</color>
+    <color name="imminent_orange">#C9781E</color>
+    <color name="white_90">#E6FFFFFF</color>
+    <color name="black_40">#66000000</color>
+
+    <color name="app_background">#0B3D2E</color>
+</resources>

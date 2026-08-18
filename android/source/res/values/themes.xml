@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.PrayerCountdown" parent="android:Theme.Material.NoActionBar">
+        <item name="android:colorPrimary">@color/emerald</item>
+        <item name="android:colorPrimaryDark">@color/deep_green</item>
+        <item name="android:colorAccent">@color/gold</item>
+        <item name="android:windowBackground">@color/app_background</item>
+    </style>
+</resources>

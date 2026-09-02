@@ -886,27 +886,23 @@ def main():
 
     icon = BELL_ICON if urgent else PRAYER_ICONS[prayer_key]
 
+    # Quattro's bar widget hardcodes textFormat: Text.PlainText
+    # (shell/Ui/WidgetButton.qml), so inline markup like <font color="...">
+    # is never parsed — it renders as literal tag text. No per-substring
+    # coloring is possible in this widget; color is whole-text only.
     countdown_display = countdown
-    if warning:
-        # <font color="..."> rather than the JSON "class" field: Qt/QML's
-        # Text element auto-detects and renders this kind of inline markup
-        # (Text.StyledText) regardless of whether the shell gives "class"
-        # any meaning for a plain command module — see omarchy4/README.md,
-        # "Design notes", for why "class" alone wasn't reliable here.
-        countdown_display = f'<font color="{get_urgent_color()}">{countdown}</font>'
 
     # Trailing "--" is a plain visual separator from the next bar module
     # (e.g. the clock) — Quattro's bar has no automatic module divider.
     text = f"{icon}  {PRAYER_NAMES[prayer_key]}  {countdown_display}  --"
 
     result = {"text": text, "tooltip": tooltip}
-    # "urgent" is the one class name actually documented to mean
-    # something to the shell (Color.urgent, the same token battery/
-    # network warnings use) — see docs/omarchy-shell.md. Sent as a
-    # bonus alongside the guaranteed <font> coloring above, not instead
-    # of it.
+    # CustomCommandModule.update() (Bar.qml) only flips color for
+    # class === "active" (or an "active" entry in an "alt" array) — NOT
+    # "urgent". This recolors the whole widget text (icon + name +
+    # countdown + "--") using the bar's active/urgent theme color.
     if warning:
-        result["class"] = "urgent"
+        result["class"] = "active"
 
     print(json.dumps(result))
 

@@ -46,7 +46,7 @@ You never type in a city or coordinates. Every version detects where you are, an
 
 | Normal | Getting close (< 15 min) | Imminent (< 5 min) |
 |:---:|:---:|:---:|
-| <img src="linux/screenshots/praybar-linux-1.png" width="230"/> | <img src="linux/screenshots/praybar-linux-2.png" width="230"/> | <img src="linux/screenshots/praybar-linux-3.png" width="230"/> |
+| <img src="hyprland/screenshots/praybar-linux-1.png" width="230"/> | <img src="hyprland/screenshots/praybar-linux-2.png" width="230"/> | <img src="hyprland/screenshots/praybar-linux-3.png" width="230"/> |
 | Waybar tooltip with the full schedule | Text turns amber | Text turns red |
 
 | GNOME notification | Android widgets | Android app |

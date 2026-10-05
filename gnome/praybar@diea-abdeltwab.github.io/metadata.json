@@ -1,0 +1,9 @@
+{
+  "uuid": "praybar@diea-abdeltwab.github.io",
+  "name": "praybar",
+  "description": "Live countdown to the next prayer in the GNOME top bar, with the full daily schedule in a dropdown, notifications and azan playback.\n\nTimes come from the Aladhan API; your location is detected automatically every night.",
+  "shell-version": ["45", "46", "47", "48", "49", "50"],
+  "settings-schema": "org.gnome.shell.extensions.praybar",
+  "url": "https://github.com/diea-abdeltwab/praybar-countdown",
+  "version-name": "1.0.0"
+}

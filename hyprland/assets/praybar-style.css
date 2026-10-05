@@ -1,0 +1,30 @@
+/* ===== Prayer Times Waybar Module — Style ===== */
+
+#custom-praybar {
+    font-family: "CaskaydiaCove Nerd Font", "Noto Sans Arabic", "Vazirmatn", sans-serif;
+    font-size: 13px;
+    padding: 0 12px;
+}
+
+#custom-praybar.prayer-normal {
+    color: inherit;
+}
+
+#custom-praybar.prayer-near {
+    color: #f0a500;
+}
+
+#custom-praybar.prayer-soon {
+    color: #e74c3c;
+    font-weight: bold;
+    animation: praybar-blink 1s step-start infinite;
+}
+
+@keyframes praybar-blink {
+    50% { opacity: 0.35; }
+}
+
+#custom-praybar.prayer-error {
+    color: #666666;
+    font-style: italic;
+}

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.prayer.countdown"
+    android:versionCode="1"
+    android:versionName="1.0">
+
+    <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="23" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PrayerCountdown">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Home-screen widget — large (4x2) -->
+        <receiver
+            android:name=".PrayerWidgetProviderLarge"
+            android:label="@string/widget_label_large"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.prayer.countdown.ACTION_REFRESH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/prayer_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".PrayerWidgetProviderSquare"
+            android:label="@string/widget_label_square"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.prayer.countdown.ACTION_REFRESH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/prayer_widget_info_square" />
+        </receiver>
+
+        <!-- Home-screen widget — small single-row (4x1) -->
+        <receiver
+            android:name=".PrayerWidgetProviderSmall"
+            android:label="@string/widget_label_small"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.prayer.countdown.ACTION_REFRESH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/prayer_widget_info_small" />
+        </receiver>
+
+        <!-- Fires exactly at each prayer time -->
+        <receiver
+            android:name=".AzanAlarmReceiver"
+            android:exported="false" />
+
+        <!-- Fires 5 min before each prayer to flip the widget color on time -->
+        <receiver
+            android:name=".ImminentRefreshReceiver"
+            android:exported="false" />
+
+        <!-- Reschedules alarms after reboot -->
+        <receiver
+            android:name=".BootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Plays azan + shows the persistent notification -->
+        <service
+            android:name=".AzanService"
+            android:exported="false" />
+
+        <!-- Plain-framework WorkManager replacement: runs the fetch + widget refresh
+             off the main thread, triggered either immediately or by a repeating alarm. -->
+        <service
+            android:name=".PrayerUpdateIntentService"
+            android:exported="false" />
+
+    </application>
+
+</manifest>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.praybar" path="/org/gnome/shell/extensions/praybar/">
+
+    <key name="calc-method" type="i">
+      <default>5</default>
+      <summary>Aladhan calculation method id</summary>
+      <description>5 = Egyptian General Authority of Survey. See https://aladhan.com/calculation-methods</description>
+    </key>
+
+    <key name="time-format" type="s">
+      <default>'24h'</default>
+      <summary>Clock format in the schedule</summary>
+      <description>'24h' (13:05) or '12h' (1:05 PM).</description>
+    </key>
+
+    <key name="prayer-names" type="s">
+      <default>'en'</default>
+      <summary>Language of prayer names</summary>
+      <description>'en' or 'ar'.</description>
+    </key>
+
+    <key name="panel-position" type="s">
+      <default>'center'</default>
+      <summary>Where the indicator sits in the top bar</summary>
+      <description>'left', 'center' or 'right'.</description>
+    </key>
+
+
+    <key name="notifications-enabled" type="b">
+      <default>true</default>
+      <summary>Show a notification when a prayer time starts</summary>
+    </key>
+    <key name="azan-enabled" type="b">
+      <default>true</default>
+      <summary>Play the azan when a prayer time starts</summary>
+    </key>
+
+    <key name="last-notified" type="s">
+      <default>''</default>
+      <summary>Internal: id of the last prayer that fired (prevents duplicates across reloads)</summary>
+    </key>
+  </schema>
+</schemalist>

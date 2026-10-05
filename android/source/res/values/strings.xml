@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">عداد الصلاة</string>
+    <string name="widget_description">عداد تنازلي أنيق لموعد الصلاة القادمة، بتحديد موقع تلقائي وأذان كامل</string>
+    <string name="widget_label_large">عداد الصلاة</string>
+    <string name="widget_label_small">عداد الصلاة سطر واحد</string>
+    <string name="widget_label_square">عداد الصلاة (٢×١)</string>
+
+    <string name="prayer_fajr">الفجر</string>
+    <string name="prayer_shurouq">الشروق</string>
+    <string name="prayer_dhuhr">الظهر</string>
+    <string name="prayer_asr">العصر</string>
+    <string name="prayer_maghrib">المغرب</string>
+    <string name="prayer_isha">العشاء</string>
+
+    <string name="next_prayer_label">القادمة</string>
+    <string name="connection_error">تعذّر الاتصال</string>
+    <string name="check_internet">تحقق من الإنترنت</string>
+    <string name="loading">جاري التحديث…</string>
+    <string name="refresh_now">تحديث الآن</string>
+    <string name="today_times_header">مواعيد صلاة اليوم</string>
+    <string name="widget_instructions">اسحب على الشاشة الرئيسية واختر «الودجت» ← «عداد الصلاة» لإضافة العداد التنازلي.</string>
+    <string name="lang_toggle_button">English</string>
+
+    <string name="azan_title">🕌 حان الآن موعد صلاة %1$s</string>
+    <string name="azan_text">الله أكبر — اضغط لإيقاف الأذان</string>
+    <string name="azan_stop_action">إيقاف الأذان</string>
+</resources>

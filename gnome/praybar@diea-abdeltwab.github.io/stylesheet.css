@@ -1,0 +1,7 @@
+/* Urgency colours mirror the Waybar version: amber under 15 min, red under 5. */
+.praybar-label { font-weight: bold; }
+.praybar-label.praybar-near { color: #f5a623; }
+.praybar-label.praybar-soon { color: #e5484d; }
+
+/* Next prayer in the dropdown */
+.praybar-next { font-weight: bold; color: #f5a623; }

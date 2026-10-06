@@ -32,11 +32,11 @@ You never type in a city or coordinates. Every version detects where you are, an
 | I use… | Use this | What you get | Docs |
 |---|---|---|---|
 | 🐧 **GNOME** (Fedora, Ubuntu, …) | [`gnome/`](gnome/) | Native Shell extension: countdown next to the clock, schedule dropdown, notification with a **Stop azan** button, preferences window | [`gnome/README.md`](gnome/README.md) |
-| 🐧 **Waybar** (Hyprland, Sway, Omarchy 3, …) | [`hyprland/`](hyprland/) | Waybar module: countdown in the bar, tooltip with the schedule, notifications and azan | [`hyprland/README.md`](hyprland/README.md) |
+| 🐧 **Waybar** (Hyprland, Sway, Omarchy 3, …) | [`hyprland/`](hyprland/) | Waybar module: countdown in the bar, tooltip with the schedule, notifications and azan | [`linux/README.md`](hyprland/README.md) |
 | 🐧 **Omarchy 4 "Quattro"** | [`omarchy-quatto/`](omarchy-quatto/) | The same module ported to Quattro's Quickshell bar via a `shell.json` command module | [`omarchy-quatto/README.md`](omarchy-quatto/README.md) |
 | 📱 **Android** | [`android/`](android/) | Home-screen widget (3 sizes) + app, scheduled azan alarms | [`android/README.md`](android/README.md) |
 
-> 🔎 **Not sure which Linux folder?** `~/.config/omarchy/shell.json` exists → Quattro (`omarchy-quatto/`). `~/.config/waybar/config.jsonc` exists → `linux/`. Running the GNOME desktop → `gnome/`.
+> 🔎 **Not sure which Linux folder?** `~/.config/omarchy/shell.json` exists → Quattro (`omarchy-quatto/`). `~/.config/waybar/config.jsonc` exists → `hyprland/`. Running the GNOME desktop → `gnome/`.
 
 ---
 
@@ -107,7 +107,7 @@ No accounts, no analytics, no telemetry.
 praybar-countdown/
 ├── gnome/            ← GNOME Shell extension (GNOME 45+)
 │   └── screenshots/
-├── linux/            ← Waybar module (Omarchy 3 / any Waybar setup)
+├── hyprland/            ← Waybar module (Omarchy 3 / any Waybar setup)
 │   └── screenshots/
 ├── omarchy-quatto/   ← Quickshell "command" module (Omarchy 4 "Quattro")
 ├── android/          ← Prayer Countdown app + widget (APK + source)

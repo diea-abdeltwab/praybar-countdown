@@ -19,11 +19,11 @@
 
 ## 🕋 About
 
-**Prayer Countdown** (عداد الصلاة) is the Android sibling of [praybar](../linux/README.md) — a home-screen widget plus companion app that shows a live countdown to the next prayer, wherever you are.
+**Prayer Countdown** (عداد الصلاة) is the Android sibling of [praybar](../hyprland/README.md) — a home-screen widget plus companion app that shows a live countdown to the next prayer, wherever you are.
 
 It auto-detects your location and country, resolves the right calculation method for that country automatically (not just Egypt), and can ring a full azan at prayer time via a scheduled alarm — even if the app itself isn't open.
 
-> 🐧 Looking for the Linux/Waybar version instead? See [`../linux/README.md`](../linux/README.md).
+> 🐧 Looking for the Linux/Waybar version instead? See [`../hyprland/README.md`](../hyprland/README.md).
 
 ---
 
@@ -142,7 +142,7 @@ Resolved automatically from your detected country code — a few examples:
 
 ## 📜 License
 
-Released under the [MIT License](../LICENSE) (applies to the whole `praybar` project, including the [Linux/Waybar version](../linux/README.md)).
+Released under the [MIT License](../LICENSE) (applies to the whole `praybar` project, including the [Linux/Waybar version](../hyprland/README.md)).
 
 ---
 

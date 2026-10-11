@@ -20,7 +20,7 @@
 
 **praybar for GNOME** is a lightweight [GNOME Shell extension](https://gjs.guide/extensions/) that shows a live countdown to the next prayer **right next to the clock** — with a dropdown for the full daily schedule, a persistent notification with a **Stop azan** button, and azan playback when the time comes.
 
-> 🧩 Looking for another platform? See the [Waybar version](../linux/README.md), the [Omarchy 4 version](../omarchy-quatto/README.md) or the [Android version](../android/README.md).
+> 🧩 Looking for another platform? See the [Waybar version](../hyprland/README.md), the [Omarchy 4 version](../omarchy-quatto/README.md) or the [Android version](../android/README.md).
 
 It detects your location by itself, calculates timings via the [Aladhan API](https://aladhan.com/prayer-times-api), and caches them sensibly, so it stays fast, quiet on your network and — most importantly — **stable**. Every night at 00:00 it fetches the new day's timings **and re-detects where you are**, so travelling to another city just works.
 

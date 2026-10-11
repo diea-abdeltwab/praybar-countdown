@@ -25,7 +25,7 @@ single long-running [Quickshell](https://quickshell.org/) process — `omarchy-s
 through `~/.config/omarchy/shell.json` instead of Waybar's `config.jsonc`.
 
 If you're still on Omarchy 3 (or any other Waybar-based setup), use
-[`../linux/`](../linux/README.md) instead — this folder is Quattro-only.
+[`../hyprland/`](../hyprland/README.md) instead — this folder is Quattro-only.
 
 > 📖 Not sure which one you're on? Run `omarchy --version`, or check whether
 > `~/.config/omarchy/shell.json` exists (Quattro) vs. `~/.config/waybar/config.jsonc`
@@ -66,7 +66,7 @@ in the Omarchy repo, "Custom bar modules", if you want the full picture
 
 ## ✨ Features
 
-Identical to the [Waybar version](../linux/README.md#-features) — location
+Identical to the [Waybar version](../hyprland/README.md#-features) — location
 detection, caching strategy, and azan/notification behavior are shared
 verbatim:
 
@@ -163,7 +163,7 @@ just installed Quattro and haven't touched the bar yet, `shell.json` may
 genuinely not exist — that's fine, the installer seeds one from Omarchy's own
 shipped defaults automatically. The warning is really aimed at "you still have
 `~/.config/waybar` and nothing Quattro-shaped" — i.e. you're probably still on
-Omarchy 3, in which case use [`../linux/`](../linux/README.md) instead.
+Omarchy 3, in which case use [`../hyprland/`](../hyprland/README.md) instead.
 </details>
 
 <details>

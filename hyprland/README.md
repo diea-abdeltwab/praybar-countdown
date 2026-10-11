@@ -85,7 +85,7 @@ Isha        20:56
 
 ```bash
 git clone https://github.com/diea-abdeltwab/praybar-countdown.git
-cd praybar-countdown/linux
+cd praybar-countdown/hyprland
 chmod +x install.sh
 ./install.sh
 # → walks you through the 9 steps below, then restarts Waybar with the module live
